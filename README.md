@@ -142,16 +142,17 @@ Kevin ersetzt den folgenden Platzhalter mit einem LiaScript-kompatiblen PlantUML
 skinparam classAttributeIconSize 0
 
 class TurnierManager {
-    - turniere: List<Gruppe>
+    - gruppen: List<Gruppe>
     - benutzer: List<Benutzer>
+    - wetten: List<Wette>
     + new(): void
     + print(): void
     + setQuote(spielId: int, typ: WettTyp, quote: double): void
     + getQuote(spielId: int, typ: WettTyp): double
     + bid(playerName: String, spielId: int, typ: WettTyp, amount: double): void
     + result(spielId: int, score: String): void
-    + saveToJson(filePath: String): void
-    + loadFromJson(filePath: String): void
+    + saveAllToJson(filePath: String): void
+    + loadAllFromJson(filePath: String): void
 }
 
 class Gruppe {
@@ -193,9 +194,11 @@ enum WettTyp {
 
 TurnierManager "1" --> "*" Gruppe : verwaltet
 TurnierManager "1" --> "*" Benutzer : verwaltet
+TurnierManager "1" --> "*" Wette : verwaltet
 Gruppe "1" *-- "*" Mannschaft : enthält
 Gruppe "1" *-- "*" Spiel : enthält
-Spiel "*" --> "2" Mannschaft : Heim/Auswärts
+Spiel "*" --> "1" Mannschaft : heimMannschaft
+Spiel "*" --> "1" Mannschaft : auswaertsMannschaft
 Benutzer "1" -- "*" Wette : platziert
 Spiel "1" -- "*" Wette : bezieht sich auf
 
