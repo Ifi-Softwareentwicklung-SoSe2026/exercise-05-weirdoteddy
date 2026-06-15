@@ -19,7 +19,7 @@ tags: [Sommersemester2026, Softwareentwicklung, Übung05]
 
 -->
 
-[![LiaScript Course](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/Ifi-Softwareentwicklung-SoSe2026/exercise_05/refs/heads/main/README.md)
+[![LiaScript Course](https://raw.githubusercontent.com/LiaScript/LiaScript/master/badges/course.svg)](https://liascript.github.io/course/?https://raw.githubusercontent.com/Ifi-Softwareentwicklung-SoSe2026/exercise-05-weirdoteddy/refs/heads/main/README.md)
 
 # Aufgabe 05
 
@@ -136,4 +136,72 @@ Kevin ersetzt den folgenden Platzhalter mit einem LiaScript-kompatiblen PlantUML
 - [plantUml Editor](https://pantuml.com)
 - paste and copy your code! Mit Reloads verlieren Sie Ihre Eingaben, daher vorher sichern!
 
-<!-- kevin:uml-diagram -->
+<!-- kevin-uml:start -->
+```text @plantUML
+@startuml
+skinparam classAttributeIconSize 0
+
+class TurnierManager {
+    - turniere: List<Gruppe>
+    - benutzer: List<Benutzer>
+    + new(): void
+    + print(): void
+    + setQuote(spielId: int, typ: WettTyp, quote: double): void
+    + getQuote(spielId: int, typ: WettTyp): double
+    + bid(playerName: String, spielId: int, typ: WettTyp, amount: double): void
+    + result(spielId: int, score: String): void
+    + saveToJson(filePath: String): void
+    + loadFromJson(filePath: String): void
+}
+
+class Gruppe {
+    - name: String
+    - teams: List<Mannschaft>
+    - spiele: List<Spiel>
+}
+
+class Mannschaft {
+    - name: String
+}
+
+class Spiel {
+    - spielId: int
+    - datum: Date
+    - uhrzeit: Time
+    - ergebnis: String
+    - quoten: Map<WettTyp, Double>
+    + setErgebnis(score: String): void
+}
+
+class Benutzer {
+    - name: String
+    - guthaben: double
+    + updateGuthaben(amount: double): void
+}
+
+class Wette {
+    - wettTyp: WettTyp
+    - quote: double
+    - einsatz: double
+    - istAusgewertet: boolean
+}
+
+enum WettTyp {
+    SIEGWETTE
+    ERGEBNISWETTE
+}
+
+TurnierManager "1" --> "*" Gruppe : verwaltet
+TurnierManager "1" --> "*" Benutzer : verwaltet
+Gruppe "1" *-- "*" Mannschaft : enthält
+Gruppe "1" *-- "*" Spiel : enthält
+Spiel "*" --> "2" Mannschaft : Heim/Auswärts
+Benutzer "1" -- "*" Wette : platziert
+Spiel "1" -- "*" Wette : bezieht sich auf
+
+note right of TurnierManager : Steuert die Applikation
+via Command-Line-Parameter
+@enduml
+```
+@plantUML.eval(png)
+<!-- kevin-uml:end -->
